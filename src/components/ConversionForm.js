@@ -1,0 +1,51 @@
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import conversionActions from "../store/actions/conversion.actions";
+
+function ConversionForm() {
+  const dispatch = useDispatch();
+
+  const [number, setNumber] = useState(0);
+  const [fieldError, setFieldError] = useState("");
+
+  const perfomConversion = () => {
+    dispatch(conversionActions.refreshStore());
+    const { validForm } = checkNumberValidity(number, setFieldError);
+
+    if (validForm) {
+      dispatch(conversionActions.convertNumber(number));
+      setFieldError("");
+    }
+  };
+
+  const handleChange = (e) => {
+    const formattedValue = e.target.value.replace(/\D/g, "");
+    setNumber(formattedValue);
+  };
+
+  return (
+    <div>
+      <form>
+        <label>Enter your number between 0 and 100 : </label>
+        <input value={number} onChange={handleChange} />
+      </form>
+
+      <button onClick={perfomConversion}>Convert number</button>
+
+      {fieldError && <p style={{ color: "red" }}>{fieldError}</p>}
+    </div>
+  );
+}
+
+function checkNumberValidity(number, setFieldError) {
+  let validForm = true;
+
+  if (number < 0 || number > 100) {
+    setFieldError("Your number have to be between 0 and 100");
+    validForm = false;
+  }
+
+  return { validForm };
+}
+
+export default ConversionForm;
