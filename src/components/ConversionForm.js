@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import conversionActions from "../store/actions/conversion.actions";
 
@@ -7,6 +7,36 @@ function ConversionForm() {
 
   const [number, setNumber] = useState(0);
   const [fieldError, setFieldError] = useState("");
+  const [eventSource, setEventSource] = useState(undefined);
+  const [eventSourceData, setEventSourceData] = useState(undefined);
+
+  useEffect(() => {
+    if (!eventSource) {
+      const eventSourceOpen = new EventSource(
+        "http://localhost:4000/live-event"
+      );
+
+      eventSourceOpen.onopen = () => {
+        console.log("opened");
+      };
+
+      setEventSource(eventSourceOpen);
+    }
+  }, [eventSource]);
+
+  useEffect(() => {
+    if (eventSource) {
+      eventSource.onmessage = (e) => {
+        setEventSourceData(JSON.parse(e.data));
+      };
+    }
+  }, [eventSource]);
+
+  useEffect(() => {
+    if (eventSourceData) {
+      dispatch(conversionActions.setConvertedNumber(eventSourceData));
+    }
+  }, [dispatch, eventSourceData]);
 
   const perfomConversion = () => {
     dispatch(conversionActions.refreshStore());

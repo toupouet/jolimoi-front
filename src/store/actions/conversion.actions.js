@@ -4,6 +4,7 @@ import {
   CONVERT_NUMBER_REQUEST,
   CONVERT_NUMBER_SUCCESS,
   REFRESH_STORE,
+  SET_CONVERTED_NUMBER,
 } from "../types/conversion.types";
 
 function convertNumber(number) {
@@ -27,6 +28,12 @@ function refreshStore() {
   };
 }
 
-const conversionActions = { convertNumber, refreshStore };
+function setConvertedNumber(eventSourceData = {}) {
+  return (dispatch) => {
+    dispatch({ type: SET_CONVERTED_NUMBER, payload: eventSourceData });
+  };
+}
+
+const conversionActions = { convertNumber, refreshStore, setConvertedNumber };
 
 export default conversionActions;

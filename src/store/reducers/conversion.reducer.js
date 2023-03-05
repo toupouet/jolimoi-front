@@ -1,7 +1,4 @@
-import {
-  CONVERT_NUMBER_SUCCESS,
-  REFRESH_STORE,
-} from "../types/conversion.types";
+import { SET_CONVERTED_NUMBER, REFRESH_STORE } from "../types/conversion.types";
 
 function initState() {
   return {
@@ -10,12 +7,10 @@ function initState() {
 }
 
 export default function conversionReducer(state = initState(), action) {
-  if (action.type === CONVERT_NUMBER_SUCCESS) {
-    return {
-      romanNumber: action.payload,
-    };
-  } else if (action.type === REFRESH_STORE) {
+  if (action.type === REFRESH_STORE) {
     return { romanNumber: "" };
+  } else if (action.type === SET_CONVERTED_NUMBER) {
+    return { romanNumber: action.payload?.convertedNumber };
   }
 
   return state;
