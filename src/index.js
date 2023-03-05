@@ -5,8 +5,12 @@ import "./index.css";
 import App from "./App";
 import { configureStore } from "@reduxjs/toolkit";
 
+import conversionReducer from "./store/reducers/conversion.reducer";
+
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    conversion: conversionReducer,
+  },
 });
 
 render(
